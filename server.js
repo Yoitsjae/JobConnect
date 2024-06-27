@@ -8,7 +8,7 @@ const server = express();
 // parses incoming requests with JSON payloads
 server.use(express.json());
 server.use(cookieParser());
-server.use(express.urlencoded({extended: true}));
+server.use(express.urlencoded({ extended: true }));
 
 server.use('/', router);
 

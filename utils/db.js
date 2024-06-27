@@ -13,7 +13,7 @@ class DBClient {
 
     this.clientIsConnected = true;
     this.client = new MongoClient(
-      `mongodb://${host}:${port}/${database}`, { useUnifiedTopology: true }
+      `mongodb://${host}:${port}/${database}`, { useUnifiedTopology: true },
     );
     this.client.connect()
       .then(() => {
@@ -22,7 +22,7 @@ class DBClient {
       .catch(() => {
         this.clientIsConnected = false;
       });
-    //this.client.db().dropDatabase();
+    // this.client.db().dropDatabase();
     this.usersCollection = this.client.db().collection('users');
   }
 

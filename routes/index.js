@@ -1,7 +1,7 @@
+import express from 'express';
 import AppController from '../controllers/AppController';
 import AuthController from '../controllers/AuthController';
 import UsersController from '../controllers/UsersController';
-import express from 'express';
 
 const router = express.Router();
 
@@ -16,7 +16,7 @@ router.post('/users', UsersController.postNew);
 router.get('/connect', AuthController.getConnect);
 router.get('/disconnect', AuthController.getDisconnect);
 
-//profile
-//router.get('/users/me', UsersController/getMe);
+// profile
+router.get('/users/me', UsersController.getMe);
 
 module.exports = router;

@@ -9,7 +9,7 @@ export default class AppController {
    * @return - {boolean}
    */
   static getStatus(req, res) {
-    res.status(200).json({db: dbClient.isAlive()});
+    res.status(200).json({ db: dbClient.isAlive() });
   }
 
   /*
@@ -18,6 +18,6 @@ export default class AppController {
    */
   static async getStats(req, res) {
     const nbUsers = await dbClient.nbUsers();
-    res.status(200).json({users: nbUsers});
+    res.status(200).json({ users: nbUsers });
   }
 }
