@@ -12,6 +12,9 @@ server.use(express.urlencoded({ extended: true }));
 
 server.use('/', router);
 
+// not found
+server.use((request, response) => response.status(404).json({ error: 'Not found' }));
+
 const port = process.env.POST || 5000;
 
 server.listen(port, () => {

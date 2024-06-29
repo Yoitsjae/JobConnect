@@ -1,5 +1,5 @@
-import { sign, verify } from 'jsonwebtoken';
 import sha1 from 'sha1';
+import JWTSecure from '../utils/jwt';
 import dbClient from '../utils/db';
 
 /*
@@ -21,7 +21,7 @@ export default class AuthController {
     if (!user) return res.status(401).json({ error: 'Unauthorized' });
 
     const secretKey = process.env.SECRETKEY || 'JobConnectKey';
-    const accessToken = sign({
+    const accessToken = JWTSecure.sign({
       username: user.username, id: user._id,
     }, secretKey);
 
@@ -40,13 +40,11 @@ export default class AuthController {
     const accessToken = req.cookies['X-Token'];
     if (!accessToken) return res.status(400).json({ error: 'Unauthorized' });
 
-    try {
-      const secretKey = process.env.SECRETKEY || 'JobConnectKey';
-      verify(accessToken, secretKey);
-      res.clearCookie('X-Token');
-    } catch (err) {
-      return res.status(400).json({ error: err.name });
-    }
+    const secretKey = process.env.SECRETKEY || 'JobConnectKey';
+    const validToken = JWTSecure.verify(accessToken, secretKey);
+    if (!validToken) return res.status(404).json({ error: 'Not found' });
+
+    res.clearCookie('X-Token');
     return res.status(204).json();
   }
 }

@@ -5,18 +5,25 @@ import UsersController from '../controllers/UsersController';
 
 const router = express.Router();
 
-// to get databaes info
+/**
+ * users specific endpoints - register, login, logout, update profifile
+ * read profile
+ */
+router.get('/users/login', AuthController.getConnect);
+router.get('/users/logout', AuthController.getDisconnect);
+router.get('/users/profile', UsersController.getMe);
+router.patch('/users/profile', UsersController.patchMe);
+router.post('/users/register', UsersController.postNew);
+
+/**
+ * status and stats specific endpoints
+ */
 router.get('/status', AppController.getStatus);
 router.get('/stats', AppController.getStats);
 
-// user registration
-router.post('/users', UsersController.postNew);
-
-// user login
-router.get('/connect', AuthController.getConnect);
-router.get('/disconnect', AuthController.getDisconnect);
-
-// profile
-router.get('/users/me', UsersController.getMe);
+/**
+ * jobs specific endpoints -  - create, update, read, delete
+ * jobs
+ */
 
 module.exports = router;

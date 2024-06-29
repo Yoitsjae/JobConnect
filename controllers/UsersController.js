@@ -1,5 +1,6 @@
 import sha1 from 'sha1';
-import { verify } from 'jsonwebtoken';
+import { ObjectID } from 'mongodb';
+import JWTSecure from '../utils/jwt';
 import dbClient from '../utils/db';
 
 /*
@@ -16,23 +17,33 @@ export default class UsersController {
    */
   static async postNew(req, res) {
     const {
-      email, name, password, role, username,
+      email, password, role, username,
     } = req.body;
 
     if (!email) return res.status(400).json({ error: 'Missing email' });
-    if (!name) return res.status(400).json({ error: 'Missing name' });
+    if (!username) return res.status(400).json({ error: 'Missing username' });
     if (!password) return res.status(400).json({ error: 'Missing password' });
     if (!role) return res.status(400).json({ error: 'Missing role' });
-    if (!username) return res.status(400).json({ error: 'Missing username' });
 
-    const emailExist = await dbClient.usersCollection.findOne({ email });
     const usernameExist = await dbClient.usersCollection.findOne({ username });
-
-    if (emailExist) return res.status(400).json({ error: 'Already exist' });
     if (usernameExist) return res.status(400).json({ error: 'Already exist' });
 
+    const emailExist = await dbClient.usersCollection.findOne({ email });
+    if (emailExist) return res.status(400).json({ error: 'Already exist' });
+
+    const profile = {
+      name: null,
+      bio: null,
+      skills: [],
+      rating: 0,
+    };
+
+    const { createdAt, updatedAt } = { createdAt: new Date(), updatedAt: new Date() };
+
+    console.log(`email: ${email}, password: ${password}, role: ${role}, profile: ${profile}, createdAt: ${createdAt}, updatedAt: ${updatedAt}`);
+
     const newUser = await dbClient.usersCollection.insertOne({
-      email, name, role, username, password: sha1(password),
+      email, role, password: sha1(password), profile, createdAt, updatedAt, username,
     });
 
     return res.status(201).json({ email, id: newUser.insertedId });
@@ -48,13 +59,44 @@ export default class UsersController {
     const accessToken = req.cookies['X-Token'];
     if (!accessToken) return res.status(401).json({ error: 'Unauthorized' });
 
-    let validToken;
-    try {
-      const secretKey = process.env.SECRETKEY || 'JobConnectKey';
-      validToken = verify(accessToken, secretKey);
-    } catch (err) {
-      return res.status(400).json({ error: err.name });
-    }
-    return res.status(200).json({ username: validToken.username, id: validToken.id });
+    const secretKey = process.env.SECRETKEY || 'JobConnectKey';
+    const validToken = JWTSecure.verify(accessToken, secretKey);
+    if (!validToken) return res.status(404).json({ error: 'Not found' });
+
+    const user = await dbClient.usersCollection.findOne({
+      _id: ObjectID(validToken.id),
+    });
+
+    return res.status(200).json({ username: user.username, id: user._id });
+  }
+
+  /**
+   * patch users profile based on token
+   * on success, returns a json message
+   */
+  static async patchMe(req, res) {
+    const accessToken = req.cookies['X-Token'];
+    if (!accessToken) return res.status(401).json({ error: 'Unauthorized' });
+
+    const secretKey = process.env.SECRETKEY || 'JobConnectKey';
+    const validToken = JWTSecure.verify(accessToken, secretKey);
+    if (!validToken) return res.status(404).json({ error: 'Not found' });
+
+    const user = await dbClient.usersCollection.findOne({
+      _id: ObjectID(validToken.id),
+    });
+
+    Object.keys(user.profile).forEach((key) => {
+      if (req.body.profile[key]) {
+        user.profile[key] = req.body.profile[key];
+      }
+    });
+
+    await dbClient.usersCollection.updateOne(
+      { email: user.email },
+      { $set: { profile: user.profile, updatedAt: new Date() } },
+    );
+
+    return res.status(200).json({ message: 'Profile updated' });
   }
 }
