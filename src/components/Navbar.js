@@ -1,18 +1,34 @@
 // src/components/Navbar.js
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './Navbar.css';
 
 const Navbar = () => {
+    const token = localStorage.getItem('token');
+
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        window.location.reload();
+    };
+
     return (
         <nav className="navbar">
             <h1>My React App</h1>
             <ul>
-                <li><a href="#home">Home</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#contact">Contact</a></li>
+                <li><Link to="/">Home</Link></li>
+                {token ? (
+                    <>
+                        <li><button onClick={handleLogout}>Logout</button></li>
+                    </>
+                ) : (
+                    <>
+                        <li><Link to="/login">Login</Link></li>
+                        <li><Link to="/register">Register</Link></li>
+                    </>
+                )}
             </ul>
         </nav>
     );
-}
+};
 
 export default Navbar;
