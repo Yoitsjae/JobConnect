@@ -8,7 +8,7 @@ const Navbar = () => {
 
     const handleLogout = () => {
         localStorage.removeItem('token');
-        window.location.reload();
+        window.location.reload(); // Reloads the page after logout
     };
 
     return (
@@ -16,11 +16,11 @@ const Navbar = () => {
             <h1>My React App</h1>
             <ul>
                 <li><Link to="/">Home</Link></li>
-                {token ? (
+                {token ? ( // If token exists (user logged in)
                     <>
                         <li><button onClick={handleLogout}>Logout</button></li>
                     </>
-                ) : (
+                ) : ( // If token doesn't exist (user not logged in)
                     <>
                         <li><Link to="/login">Login</Link></li>
                         <li><Link to="/register">Register</Link></li>

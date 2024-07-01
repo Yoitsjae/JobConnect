@@ -1,0 +1,27 @@
+/* Nav.css */
+
+/* Basic styles for the navigation bar */
+.navbar {
+  background-color: #333; /* Dark background color */
+  overflow: hidden; /* Ensure content doesn't overflow */
+  position: fixed; /* Fixed position on top of the page */
+  width: 100%; /* Full width */
+  top: 0; /* Positioned at the top */
+  z-index: 1000; /* Ensure it's above other content */
+}
+
+/* Style for the links inside the navigation bar */
+.navbar a {
+  float: left; /* Align links to the left */
+  display: block; /* Display as block element */
+  color: white; /* Text color */
+  text-align: center; /* Center-align text */
+  padding: 14px 16px; /* Padding around each link */
+  text-decoration: none; /* Remove underline */
+}
+
+/* Change color on hover */
+.navbar a:hover {
+  background-color: #ddd; /* Light gray background on hover */
+  color: black; /* Change text color on hover */
+}
