@@ -1,0 +1,27 @@
+/* src/App.css */
+.App {
+  text-align: center;
+}
+
+/* src/components/JobListing.css */
+.job-listing {
+  padding: 2rem;
+}
+
+.job-listing input,
+.job-listing select {
+  margin: 0.5rem;
+  padding: 0.5rem;
+}
+
+.job-listing ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.job-listing li {
+  border: 1px solid #ddd;
+  margin: 0.5rem 0;
+  padding: 1rem;
+  border-radius: 4px;
+}
