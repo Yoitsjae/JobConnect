@@ -1,27 +1,49 @@
-/* Nav.css */
+/* src/components/Nav.css */
 
-/* Basic styles for the navigation bar */
 .navbar {
-  background-color: #333; /* Dark background color */
-  overflow: hidden; /* Ensure content doesn't overflow */
-  position: fixed; /* Fixed position on top of the page */
-  width: 100%; /* Full width */
-  top: 0; /* Positioned at the top */
-  z-index: 1000; /* Ensure it's above other content */
+  background-color: #333;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-/* Style for the links inside the navigation bar */
-.navbar a {
-  float: left; /* Align links to the left */
-  display: block; /* Display as block element */
-  color: white; /* Text color */
-  text-align: center; /* Center-align text */
-  padding: 14px 16px; /* Padding around each link */
-  text-decoration: none; /* Remove underline */
+.navbar h1 {
+  color: #fff;
 }
 
-/* Change color on hover */
-.navbar a:hover {
-  background-color: #ddd; /* Light gray background on hover */
-  color: black; /* Change text color on hover */
+.navbar ul {
+  list-style-type: none;
+  display: flex;
+  gap: 1rem;
+}
+
+.navbar ul li {
+  display: inline;
+}
+
+.navbar ul li a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.navbar ul li button {
+  background: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+}
+
+.navbar ul li button:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 600px) {
+  .navbar ul {
+      flex-direction: column;
+  }
+
+  .navbar ul li {
+      margin: 10px 0;
+  }
 }

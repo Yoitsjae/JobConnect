@@ -1,14 +1,14 @@
 // src/components/Navbar.js
 import React from 'react';
 import { Link } from 'react-router-dom';
-import './Navbar.css';
+import './Nav.css';  // Ensure the import path is correct
 
 const Navbar = () => {
     const token = localStorage.getItem('token');
 
     const handleLogout = () => {
         localStorage.removeItem('token');
-        window.location.reload(); // Reloads the page after logout
+        window.location.reload();
     };
 
     return (
@@ -16,11 +16,11 @@ const Navbar = () => {
             <h1>My React App</h1>
             <ul>
                 <li><Link to="/">Home</Link></li>
-                {token ? ( // If token exists (user logged in)
+                {token ? (
                     <>
                         <li><button onClick={handleLogout}>Logout</button></li>
                     </>
-                ) : ( // If token doesn't exist (user not logged in)
+                ) : (
                     <>
                         <li><Link to="/login">Login</Link></li>
                         <li><Link to="/register">Register</Link></li>
