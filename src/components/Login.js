@@ -10,6 +10,11 @@ const Login = ({ onLogin }) => {
         e.preventDefault();
         setError('');
 
+        if (!email || !password) {
+            setError('Please fill in all fields');
+            return;
+        }
+
         try {
             const response = await fetch('https://your-backend-api.com/login', {
                 method: 'POST',
