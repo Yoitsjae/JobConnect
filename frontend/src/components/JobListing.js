@@ -1,4 +1,4 @@
-// src/components/JobListing.js
+// frontend/src/components/JobListing.js
 import React, { useState, useEffect } from 'react';
 import JobApplication from './JobApplication';
 
@@ -10,7 +10,7 @@ const JobListing = () => {
     const [selectedJob, setSelectedJob] = useState(null);
 
     useEffect(() => {
-        fetch('https://your-backend-api.com/jobs')
+        fetch('http://localhost:4000/api/jobs') // Updated URL
             .then((response) => response.json())
             .then((data) => setJobs(data))
             .catch((error) => console.error('Error fetching job listings:', error));
