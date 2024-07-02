@@ -1,0 +1,27 @@
+/* src/App.css */
+.App {
+  text-align: center;
+  padding: 20px;
+}
+
+.navbar ul {
+  display: flex;
+  justify-content: space-around;
+  list-style-type: none;
+}
+
+.navbar ul li {
+  margin: 0 10px;
+}
+
+@media (max-width: 600px) {
+  .navbar ul {
+      flex-direction: column;
+  }
+
+  .navbar ul li {
+      margin: 10px 0;
+  }
+}
+
+/* Add more media queries as needed */
