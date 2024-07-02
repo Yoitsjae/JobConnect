@@ -13,7 +13,6 @@ export default class AuthController {
    * on success, generate jwt with id, email return it in a cookie
    */
   static async getConnect(req, res) {
-    console.log('HELLO!!!');
     const { email, password } = req.body;
     const user = await dbClient.usersCollection.findOne({
       email, password: sha1(password),
