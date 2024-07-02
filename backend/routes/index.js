@@ -21,4 +21,14 @@ router.post('/register', UsersController.postNew);
 router.get('/status', AppController.getStatus);
 router.get('/stats', AppController.getStats);
 
+/**
+ * jobs specific endpoints - create, update, read, delete
+ * jobs
+ */
+router.post('/post-jobs', JobsController.postNew);
+router.get('/jobs/:id', JobsController.showJob);
+router.put('/jobs/:id', JobsController.showJob);
+router.get('/jobs', JobsController.getJob);
+router.get('/delete/:id', JobsController.deleteJob);
+
 module.exports = router;
