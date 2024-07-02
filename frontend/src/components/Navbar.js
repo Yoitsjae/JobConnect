@@ -1,7 +1,7 @@
-// src/components/Navbar.js
+// frontend/src/components/Navbar.js
 import React from 'react';
 import { Link } from 'react-router-dom';
-import './Nav.css';  // Ensure the import path is correct
+import './Navbar.css';
 
 const Navbar = () => {
     const token = localStorage.getItem('token');

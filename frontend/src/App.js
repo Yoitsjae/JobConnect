@@ -1,4 +1,4 @@
-// src/App.js
+// frontend/src/App.js
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 import Navbar from './components/Navbar';
@@ -36,22 +36,22 @@ function App() {
                 <Navbar />
                 <Switch>
                     <Route path="/" exact component={LandingPage} />
-                    <Route path="/login">
-                        {user ? <Redirect to="/" /> : <Login onLogin={handleLogin} />}
-                    </Route>
-                    <Route path="/register">
-                        {user ? <Redirect to="/" /> : <Register onRegister={handleRegister} />}
-                    </Route>
+                    <Route path="/login" render={() => (
+                        user ? <Redirect to="/" /> : <Login onLogin={handleLogin} />
+                    )} />
+                    <Route path="/register" render={() => (
+                        user ? <Redirect to="/" /> : <Register onRegister={handleRegister} />
+                    )} />
                     <Route path="/jobs" component={JobListing} />
-                    <Route path="/post-job">
-                        {user ? <JobPosting onJobPost={handleJobPost} /> : <Redirect to="/login" />}
-                    </Route>
-                    <Route path="/payment">
-                        {user ? <PaymentForm onPaymentSuccess={handlePaymentSuccess} /> : <Redirect to="/login" />}
-                    </Route>
-                    <Route path="/notifications">
-                        {user ? <Notification /> : <Redirect to="/login" />}
-                    </Route>
+                    <Route path="/post-job" render={() => (
+                        user ? <JobPosting onJobPost={handleJobPost} /> : <Redirect to="/login" />
+                    )} />
+                    <Route path="/payment" render={() => (
+                        user ? <PaymentForm onPaymentSuccess={handlePaymentSuccess} /> : <Redirect to="/login" />
+                    )} />
+                    <Route path="/notifications" render={() => (
+                        user ? <Notification /> : <Redirect to="/login" />
+                    )} />
                 </Switch>
             </div>
         </Router>
