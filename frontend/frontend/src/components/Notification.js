@@ -1,5 +1,6 @@
 // src/components/Notification.js
 import React, { useState, useEffect } from 'react';
+import './Notification.css';
 
 const Notification = () => {
     const [notifications, setNotifications] = useState([]);

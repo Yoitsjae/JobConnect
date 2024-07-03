@@ -1,17 +1,24 @@
-// src/components/JobPosting.js
-import React, { useState } from 'react';
+// frontend/src/components/JobPosting.js
+import React from 'react';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
 
 const JobPosting = ({ onJobPost }) => {
-    const [title, setTitle] = useState('');
-    const [description, setDescription] = useState('');
-    const [location, setLocation] = useState('');
-    const [jobType, setJobType] = useState('');
-    const [error, setError] = useState('');
+    const initialValues = {
+        title: '',
+        description: '',
+        location: '',
+        jobType: '',
+    };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setError('');
+    const validationSchema = Yup.object({
+        title: Yup.string().required('Title is required'),
+        description: Yup.string().required('Description is required'),
+        location: Yup.string().required('Location is required'),
+        jobType: Yup.string().required('Job type is required'),
+    });
 
+    const handleSubmit = async (values, { setSubmitting, setErrors }) => {
         try {
             const response = await fetch('https://your-backend-api.com/jobs', {
                 method: 'POST',
@@ -19,7 +26,7 @@ const JobPosting = ({ onJobPost }) => {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${localStorage.getItem('token')}`,
                 },
-                body: JSON.stringify({ title, description, location, jobType }),
+                body: JSON.stringify(values),
             });
 
             if (!response.ok) {
@@ -29,51 +36,51 @@ const JobPosting = ({ onJobPost }) => {
             const data = await response.json();
             onJobPost(data.job);
         } catch (error) {
-            setError(error.message);
+            setErrors({ submit: error.message });
+        } finally {
+            setSubmitting(false);
         }
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <h2>Post a Job</h2>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
-            <div>
-                <label>Title</label>
-                <input
-                    type="text"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                    required
-                />
-            </div>
-            <div>
-                <label>Description</label>
-                <textarea
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                    required
-                />
-            </div>
-            <div>
-                <label>Location</label>
-                <input
-                    type="text"
-                    value={location}
-                    onChange={(e) => setLocation(e.target.value)}
-                    required
-                />
-            </div>
-            <div>
-                <label>Job Type</label>
-                <select value={jobType} onChange={(e) => setJobType(e.target.value)} required>
-                    <option value="">Select Job Type</option>
-                    <option value="full-time">Full-time</option>
-                    <option value="part-time">Part-time</option>
-                    <option value="contract">Contract</option>
-                </select>
-            </div>
-            <button type="submit">Post Job</button>
-        </form>
+        <Formik
+            initialValues={initialValues}
+            validationSchema={validationSchema}
+            onSubmit={handleSubmit}
+        >
+            {({ isSubmitting, errors }) => (
+                <Form>
+                    <h2>Post a Job</h2>
+                    {errors.submit && <p style={{ color: 'red' }}>{errors.submit}</p>}
+                    <div>
+                        <label>Title</label>
+                        <Field type="text" name="title" />
+                        <ErrorMessage name="title" component="div" style={{ color: 'red' }} />
+                    </div>
+                    <div>
+                        <label>Description</label>
+                        <Field as="textarea" name="description" />
+                        <ErrorMessage name="description" component="div" style={{ color: 'red' }} />
+                    </div>
+                    <div>
+                        <label>Location</label>
+                        <Field type="text" name="location" />
+                        <ErrorMessage name="location" component="div" style={{ color: 'red' }} />
+                    </div>
+                    <div>
+                        <label>Job Type</label>
+                        <Field as="select" name="jobType">
+                            <option value="">Select Job Type</option>
+                            <option value="full-time">Full-time</option>
+                            <option value="part-time">Part-time</option>
+                            <option value="contract">Contract</option>
+                        </Field>
+                        <ErrorMessage name="jobType" component="div" style={{ color: 'red' }} />
+                    </div>
+                    <button type="submit" disabled={isSubmitting}>Post Job</button>
+                </Form>
+            )}
+        </Formik>
     );
 };
 

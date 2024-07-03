@@ -1,16 +1,22 @@
-// src/components/JobApplication.js
-import React, { useState } from 'react';
+// frontend/src/components/JobApplication.js
+import React from 'react';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
 
 const JobApplication = ({ jobId, onApplicationSubmit }) => {
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [coverLetter, setCoverLetter] = useState('');
-    const [error, setError] = useState('');
+    const initialValues = {
+        name: '',
+        email: '',
+        coverLetter: '',
+    };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setError('');
+    const validationSchema = Yup.object({
+        name: Yup.string().required('Name is required'),
+        email: Yup.string().email('Invalid email address').required('Email is required'),
+        coverLetter: Yup.string().required('Cover letter is required'),
+    });
 
+    const handleSubmit = async (values, { setSubmitting, setErrors }) => {
         try {
             const response = await fetch(`https://your-backend-api.com/jobs/${jobId}/apply`, {
                 method: 'POST',
@@ -18,7 +24,7 @@ const JobApplication = ({ jobId, onApplicationSubmit }) => {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${localStorage.getItem('token')}`,
                 },
-                body: JSON.stringify({ name, email, coverLetter }),
+                body: JSON.stringify(values),
             });
 
             if (!response.ok) {
@@ -28,42 +34,41 @@ const JobApplication = ({ jobId, onApplicationSubmit }) => {
             const data = await response.json();
             onApplicationSubmit(data.application);
         } catch (error) {
-            setError(error.message);
+            setErrors({ submit: error.message });
+        } finally {
+            setSubmitting(false);
         }
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <h2>Apply for Job</h2>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
-            <div>
-                <label>Name</label>
-                <input
-                    type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    required
-                />
-            </div>
-            <div>
-                <label>Email</label>
-                <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                />
-            </div>
-            <div>
-                <label>Cover Letter</label>
-                <textarea
-                    value={coverLetter}
-                    onChange={(e) => setCoverLetter(e.target.value)}
-                    required
-                />
-            </div>
-            <button type="submit">Apply</button>
-        </form>
+        <Formik
+            initialValues={initialValues}
+            validationSchema={validationSchema}
+            onSubmit={handleSubmit}
+        >
+            {({ isSubmitting, errors }) => (
+                <Form>
+                    <h2>Apply for Job</h2>
+                    {errors.submit && <p style={{ color: 'red' }}>{errors.submit}</p>}
+                    <div>
+                        <label>Name</label>
+                        <Field type="text" name="name" />
+                        <ErrorMessage name="name" component="div" style={{ color: 'red' }} />
+                    </div>
+                    <div>
+                        <label>Email</label>
+                        <Field type="email" name="email" />
+                        <ErrorMessage name="email" component="div" style={{ color: 'red' }} />
+                    </div>
+                    <div>
+                        <label>Cover Letter</label>
+                        <Field as="textarea" name="coverLetter" />
+                        <ErrorMessage name="coverLetter" component="div" style={{ color: 'red' }} />
+                    </div>
+                    <button type="submit" disabled={isSubmitting}>Apply</button>
+                </Form>
+            )}
+        </Formik>
     );
 };
 
