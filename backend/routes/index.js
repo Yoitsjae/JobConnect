@@ -2,6 +2,7 @@ import express from 'express';
 import AppController from '../controllers/AppController';
 import AuthController from '../controllers/AuthController';
 import UsersController from '../controllers/UsersController';
+import JobsController from '../controllers/JobsController';
 
 const router = express.Router();
 
