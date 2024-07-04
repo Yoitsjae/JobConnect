@@ -2,6 +2,8 @@ import express from 'express';
 import AppController from '../controllers/AppController';
 import AuthController from '../controllers/AuthController';
 import UsersController from '../controllers/UsersController';
+import JobsController from '../controllers/JobsController';
+import proposalsController from '../controllers/ProposalsController';
 
 const router = express.Router();
 
@@ -30,5 +32,12 @@ router.get('/jobs/:id', JobsController.showJob);
 router.put('/jobs/:id', JobsController.showJob);
 router.get('/jobs', JobsController.getJob);
 router.get('/delete/:id', JobsController.deleteJob);
+
+/**
+ * proposals specific endpoints - creates, read
+ */
+router.post('/jobs/:jobId/proposal', proposalsController.postNew);
+router.get('/jobs/:id/proposal', proposalsController.showProposal);
+router.put('/jobs/:jobId/proposal/:id', proposalsController.putProposal);
 
 module.exports = router;
