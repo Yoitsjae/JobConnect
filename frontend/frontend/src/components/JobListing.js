@@ -10,7 +10,7 @@ const JobListing = () => {
     const [selectedJob, setSelectedJob] = useState(null);
 
     useEffect(() => {
-        fetch('http://localhost:4000/api/jobs') // Updated URL
+        fetch('http://localhost:5000/jobs')
             .then((response) => response.json())
             .then((data) => setJobs(data))
             .catch((error) => console.error('Error fetching job listings:', error));
