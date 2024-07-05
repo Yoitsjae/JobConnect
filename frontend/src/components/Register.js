@@ -1,36 +1,33 @@
-// src/components/Login.js
+// src/components/Register.js
 import React, { useState } from 'react';
 
-const Login = ({ onLogin }) => {
+const Register = ({ onRegister }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [username, setUsername] = useState('');
+    const [role, setRole] = useState('');
     const [error, setError] = useState('');
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
 
-        if (!email || !password) {
-            setError('Please fill in all fields');
-            return;
-        }
-
         try {
-            const response = await fetch('https://your-backend-api.com/login', {
+            const response = await fetch('http://localhost:5000/register', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ email, password }),
+                body: JSON.stringify({ email, password, role, username }),
             });
 
             if (!response.ok) {
-                throw new Error('Invalid credentials');
+                throw new Error('Registration failed');
             }
 
             const data = await response.json();
             localStorage.setItem('token', data.token);
-            onLogin(data.user);
+            onRegister(data.user);
         } catch (error) {
             setError(error.message);
         }
@@ -38,7 +35,7 @@ const Login = ({ onLogin }) => {
 
     return (
         <form onSubmit={handleSubmit}>
-            <h2>Login</h2>
+            <h2>Register</h2>
             {error && <p style={{ color: 'red' }}>{error}</p>}
             <div>
                 <label>Email</label>
@@ -58,9 +55,27 @@ const Login = ({ onLogin }) => {
                     required
                 />
             </div>
-            <button type="submit">Login</button>
+            <div>
+                <label>Username</label>
+                <input
+                    type="text"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    required
+                />
+            </div>
+            <div>
+                <label>Role</label>
+                <input
+                    type="text"
+                    value={role}
+                    onChange={(e) => setRole(e.target.value)}
+                    required
+                />
+            </div>
+            <button type="submit">Register</button>
         </form>
     );
 };
 
-export default Login;
+export default Register;

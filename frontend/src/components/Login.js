@@ -1,7 +1,7 @@
-// src/components/Register.js
+// src/components/Login.js
 import React, { useState } from 'react';
 
-const Register = ({ onRegister }) => {
+const Login = ({ onLogin }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -10,8 +10,13 @@ const Register = ({ onRegister }) => {
         e.preventDefault();
         setError('');
 
+        if (!email || !password) {
+            setError('Please fill in all fields');
+            return;
+        }
+
         try {
-            const response = await fetch('https://your-backend-api.com/register', {
+            const response = await fetch('http://localhost:5000/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -20,12 +25,12 @@ const Register = ({ onRegister }) => {
             });
 
             if (!response.ok) {
-                throw new Error('Registration failed');
+                throw new Error('Invalid credentials');
             }
 
             const data = await response.json();
             localStorage.setItem('token', data.token);
-            onRegister(data.user);
+            onLogin(data.user);
         } catch (error) {
             setError(error.message);
         }
@@ -33,7 +38,7 @@ const Register = ({ onRegister }) => {
 
     return (
         <form onSubmit={handleSubmit}>
-            <h2>Register</h2>
+            <h2>Login</h2>
             {error && <p style={{ color: 'red' }}>{error}</p>}
             <div>
                 <label>Email</label>
@@ -53,9 +58,9 @@ const Register = ({ onRegister }) => {
                     required
                 />
             </div>
-            <button type="submit">Register</button>
+            <button type="submit">Login</button>
         </form>
     );
 };
 
-export default Register;
+export default Login;
