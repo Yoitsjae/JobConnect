@@ -1,4 +1,5 @@
 import dbClient from '../utils/db';
+import paypalClient from '../utils/paypal';
 
 /*
  * creates apps endpoints
@@ -9,7 +10,9 @@ export default class AppController {
    * return - {boolean}
    */
   static getStatus(req, res) {
-    res.status(200).json({ db: dbClient.isAlive() });
+    res.status(200).json({
+      db: dbClient.isAlive(), paypal: paypalClient.isAlive(),
+    });
   }
 
   /*
