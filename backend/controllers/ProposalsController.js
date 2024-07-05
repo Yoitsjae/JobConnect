@@ -5,9 +5,9 @@ import JWTSecure from '../utils/jwt';
 /**
  * job application endpoints
  */
-export default class proposalsController {
+export default class ProposalsController {
   /**
-   *apply to a listed job in database. A proposal has these attributes
+   * apply to a listed job in database. A proposal has these attributes
    * jobId, coverLetter, amount, createdAt,
    * updatedAt, freelancerId, status
    *

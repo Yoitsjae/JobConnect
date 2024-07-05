@@ -3,7 +3,8 @@ import AppController from '../controllers/AppController';
 import AuthController from '../controllers/AuthController';
 import UsersController from '../controllers/UsersController';
 import JobsController from '../controllers/JobsController';
-import proposalsController from '../controllers/ProposalsController';
+import ProposalsController from '../controllers/ProposalsController';
+import PaymentsController from '../controllers/PaymentsController';
 
 const router = express.Router();
 
@@ -36,8 +37,14 @@ router.get('/delete/:id', JobsController.deleteJob);
 /**
  * proposals specific endpoints - creates, read
  */
-router.post('/jobs/:jobId/proposal', proposalsController.postNew);
-router.get('/jobs/:id/proposal', proposalsController.showProposal);
-router.put('/jobs/:jobId/proposal/:id', proposalsController.putProposal);
+router.post('/jobs/:jobId/proposal', ProposalsController.postNew);
+router.get('/jobs/:id/proposal', ProposalsController.showProposal);
+router.put('/jobs/:jobId/proposal/:id', ProposalsController.putProposal);
+
+/**
+ * payment specific endpoints - creates invoice, capture order request
+ */
+router.post('/create-invoice/:jobId', PaymentsController.postInvoice);
+router.post('capture-invoice/:jpbId', PaymentsController.captureInvoice);
 
 module.exports = router;
